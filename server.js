@@ -18,11 +18,11 @@ const connection = mysql.createConnection({
 connection.connect((err) => {
   if (err) throw err;
   console.log("========= EMPLOYEE MANAGER =========")
-  firstPrompt();
+  mainMenu();
 });
 
 //prompts 
-const firstPrompt = () => {
+const mainMenu = () => {
   inquirer.prompt ([
     {
       type: 'list',
@@ -40,7 +40,7 @@ const firstPrompt = () => {
   ]).then((answer) => {
     switch (answer.mainmenu) {
       case 'View All Departments':
-        console.log("1")
+        viewAllDepartments();
         break;
       case 'View All Roles':
         console.log("2")
@@ -64,3 +64,14 @@ const firstPrompt = () => {
     }
   });
 }
+
+function viewAllDepartments () {
+    connection.query("SELECT * FROM employees_db.department", function (err, res) {
+        if (err) throw err;
+        console.table(res);
+        mainMenu();
+    });
+}
+
+
+
