@@ -74,7 +74,7 @@ function viewAllDepartments () {
 }
 
 function viewAllRoles () {
-  connection.query("SELECT * FROM employees_db.role", function (err, res) {
+  connection.query("SELECT e.id, r.title, d.name AS department, r.salary FROM employee e JOIN role r ON e.role_id = r.id JOIN department d ON d.id = r.department_id", function (err, res) {
       if (err) throw err;
       console.table(res);
       mainMenu();
