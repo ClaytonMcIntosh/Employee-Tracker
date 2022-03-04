@@ -43,7 +43,7 @@ const mainMenu = () => {
         viewAllDepartments();
         break;
       case 'View All Roles':
-        console.log("2")
+        viewAllRoles();
         break;
       case 'View All Employees':
         console.log("3")
@@ -73,5 +73,12 @@ function viewAllDepartments () {
     });
 }
 
+function viewAllRoles () {
+  connection.query("SELECT * FROM employees_db.role", function (err, res) {
+      if (err) throw err;
+      console.table(res);
+      mainMenu();
+  });
+}
 
 
