@@ -93,28 +93,17 @@ function addDepartment() {
   inquirer
   .prompt({
     type: 'input',
-    name: 'department',
+    name: 'proptDepartment',
     message: 'What is the name of the department?',
   })
-  .then((answer) => {
+  .then(answer => {
+    var query = connection.query(
+        "INSERT INTO department (name) VALUES (?)", answer.proptDepartment, (err) => {
+            if (err) throw err;
+            console.log("Added " + answer.proptDepartment + " to the database");
+            mainMenu();
+        }
+    )
+})
+}
 
-
-
-
-
-    
-//     const sql = `INSERT INTO department(dept_name) VALUES (?)`;
-//     const param = [data.department];
-//     console.log(param);
-
-//     db.query(sql, param, (err, results) => {
-//       if (err) {
-//         throw err;
-//       }
-
-//       menuQ();
-//     });
-//   });
-// }
-
-// }
