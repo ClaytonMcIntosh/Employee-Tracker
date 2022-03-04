@@ -49,7 +49,7 @@ const mainMenu = () => {
         viewAllEmployees();
         break; 
       case 'Add Department':
-        console.log("4")
+        addDepartment();
         break;
       case 'Add Role':
         console.log("5")
@@ -88,3 +88,33 @@ function viewAllEmployees() {
       mainMenu();
   });
 }
+
+function addDepartment() {
+  inquirer
+  .prompt({
+    type: 'input',
+    name: 'department',
+    message: 'What is the name of the department?',
+  })
+  .then((answer) => {
+
+
+
+
+
+    
+//     const sql = `INSERT INTO department(dept_name) VALUES (?)`;
+//     const param = [data.department];
+//     console.log(param);
+
+//     db.query(sql, param, (err, results) => {
+//       if (err) {
+//         throw err;
+//       }
+
+//       menuQ();
+//     });
+//   });
+// }
+
+// }
