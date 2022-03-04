@@ -52,7 +52,7 @@ const mainMenu = () => {
         addDepartment();
         break;
       case 'Add Role':
-        console.log("5")
+        addRole();
         break;
       case 'Add Employee':
         console.log("6")
@@ -106,4 +106,38 @@ function addDepartment() {
     )
 })
 }
+
+function addRole() {
+  inquirer
+  .prompt([{
+    type: 'input',
+    name: 'promptRoleName',
+    message: 'What is the name of the role?',
+  }
+  ,{
+    type: 'input',
+    name: 'promptRoleSalary',
+    message: 'What is the salary of the role?',
+  }
+])
+  .then(answer => {
+    var query = connection.query(
+        "INSERT INTO role (title, salary) VALUES (?, ?)", [answer.promptRoleName, answer.promptRoleSalary], (err) => {
+            if (err) throw err;
+            console.log("Added " + answer.promptRoleName + ", " + answer.promptRoleSalary + " to the database");
+            mainMenu();
+        }
+    )
+})
+}
+
+
+
+
+// {
+//   type: 'list',
+//   name: 'promptRoleDepartment',
+//   message: 'What department is this role in?',
+// }
+
 
