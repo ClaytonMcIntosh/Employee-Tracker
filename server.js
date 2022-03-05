@@ -58,7 +58,7 @@ const mainMenu = () => {
         addEmployee();
         break;
       case 'Update Employee Role':
-        console.log("7")
+        updateEmployeesRole();
         break;
 
     }
@@ -196,4 +196,51 @@ function addEmployee() {
       )
     })
   })
-  })}
+})}
+
+function updateEmployeesRole() {
+      connection.query("SELECT * FROM employees_db.employee", function (err, result) {
+        let employees = result;
+        const employeeChoices = employees.map(emp => {
+          return {
+            name: emp.first_name,
+            value: emp.id
+          }
+        });
+  
+        connection.query("SELECT * FROM employees_db.role", function (err, result) {
+          let roles = result;
+          const roleChoices = roles.map(rol => {
+            return {
+              name: rol.title,
+              value: rol.id
+            }
+          });
+
+
+    inquirer
+      .prompt([{
+        type: "list",
+        name: "employee_update",
+        message: "Which employee's role do you want to update?",
+        choices: employeeChoices,
+      }, 
+      {
+        type: "list",
+        name: "role",
+        message: "What is the employee's new role?",
+        choices: roleChoices
+      },
+        ])
+      .then(answer => {
+        var query = connection.query(
+          "UPDATE employee SET role_id = ? WHERE id = ? ",
+          [answer.role, answer.employee_update], (err) => {
+            if (err) throw err;
+            console.log("Updated role");
+            mainMenu();
+          }
+        )
+      })
+    })
+    })}
