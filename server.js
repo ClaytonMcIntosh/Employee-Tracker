@@ -14,14 +14,14 @@ const connection = mysql.createConnection({
 });
 
 
-// after connecting, check for error or run first prompt function
+// after connecting, display title and run first prompt function
 connection.connect((err) => {
   if (err) throw err;
   console.log("========= EMPLOYEE MANAGER =========")
   mainMenu();
 });
 
-//prompts 
+//main menu prompts
 const mainMenu = () => {
   inquirer.prompt ([
     {
@@ -65,6 +65,7 @@ const mainMenu = () => {
   });
 }
 
+//display a table of all departments using sql
 function viewAllDepartments () {
     connection.query("SELECT * FROM employees_db.department", function (err, res) {
         if (err) throw err;
@@ -73,6 +74,7 @@ function viewAllDepartments () {
     });
 }
 
+//display a table of all roles using sql
 function viewAllRoles () {
   connection.query("SELECT r.id, r.title, d.name AS department, r.salary FROM department d LEFT JOIN role r ON d.id = department_id", function (err, res) {
       if (err) throw err;
@@ -81,6 +83,7 @@ function viewAllRoles () {
   });
 }
 
+//display a table of all employees using sql. Note that I am getting info from different tables
 function viewAllEmployees() {
   connection.query("SELECT e.id, e.first_name, e.last_name, r.title, d.name AS department, r.salary, CONCAT(m.first_name, ' ', m.last_name) AS Manager FROM employee e JOIN role r ON e.role_id = r.id JOIN department d ON d.id = r.department_id LEFT JOIN employee m ON m.id = e.manager_id", function (err, res) {
       if (err) throw err;
@@ -89,6 +92,7 @@ function viewAllEmployees() {
   });
 }
 
+//adding a departments using sql
 function addDepartment() {
   inquirer
   .prompt({
@@ -107,6 +111,7 @@ function addDepartment() {
 })
 }
 
+//adding a role using sql
 function addRole() {
   connection.query("SELECT * FROM employees_db.department", function (err, result) {
     let departments = result;
@@ -144,6 +149,7 @@ function addRole() {
   })
 }
 
+//adding an employee using sql
 function addEmployee() {
   connection.query("SELECT * FROM employees_db.role", function (err, result) {
     let roles = result;
@@ -198,6 +204,7 @@ function addEmployee() {
   })
 })}
 
+//updating an employee's role using sql
 function updateEmployeesRole() {
       connection.query("SELECT * FROM employees_db.employee", function (err, result) {
         let employees = result;

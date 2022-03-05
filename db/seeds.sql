@@ -1,3 +1,4 @@
+-- Filling the database with data
 USE employees_db;
 
 INSERT into department (name) VALUES ("Sales");

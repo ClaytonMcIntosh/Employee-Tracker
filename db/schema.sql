@@ -1,9 +1,11 @@
+-- creating or replacing a database called employees_db, then using it
 DROP DATABASE IF EXISTS employees_db;
 
 CREATE DATABASE employees_db;
 
 USE employees_db;
 
+--building out the three diffrent tables of data... department, role and employee. Setting id to auto increment
 CREATE TABLE department (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(30) NULL
