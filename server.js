@@ -55,7 +55,7 @@ const mainMenu = () => {
         addRole();
         break;
       case 'Add Employee':
-        console.log("6")
+        addEmployee();
         break;
       case 'Update Employee Role':
         console.log("7")
@@ -137,6 +137,45 @@ function addRole() {
         "INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)", [answer.title, answer.salary, answer.department_id], (err) => {
           if (err) throw err;
           console.log("Added " + answer.title + ", " + answer.salary + ", and " + answer.department_id + " to the database");
+          mainMenu();
+        }
+      )
+    })
+  })
+}
+
+function addEmployee() {
+  connection.query("SELECT * FROM employees_db.role", function (err, result) {
+    let roles = result;
+    const roleChoices = roles.map(rol => {
+      return {
+        name: rol.title,
+        value: rol.department_id
+      }
+    });
+
+
+  inquirer
+    .prompt([{
+      type: 'input',
+      name: 'first_name',
+      message: "What is the employee's first name?",
+    }, {
+      type: 'input',
+      name: 'last_name',
+      message: "What is the employee's last name?",
+    },
+    {
+      type: "list",
+      name: "role",
+      message: "What is the employee's role?",
+      choices: roleChoices
+    }])
+    .then(answer => {
+      var query = connection.query(
+        "INSERT INTO employee (first_name, last_name, role_id) VALUES (?, ?, ?)", [answer.first_name, answer.last_name, answer.role], (err) => {
+          if (err) throw err;
+          console.log("Added " + answer.first_name + ", " + answer.last_name + ", and " + answer.role_id + " to the database");
           mainMenu();
         }
       )
