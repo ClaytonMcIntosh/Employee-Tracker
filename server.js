@@ -108,50 +108,38 @@ function addDepartment() {
 }
 
 function addRole() {
+  connection.query("SELECT * FROM employees_db.department", function (err, result) {
+    let departments = result;
+    const departmentChoices = departments.map(dep => {
+      return {
+        name: dep.name,
+        value: dep.id
+      }
+    })
   inquirer
-  .prompt([{
-    type: 'input',
-    name: 'promptRoleName',
-    message: 'What is the name of the role?',
-  }
-  ,{
-    type: 'input',
-    name: 'promptRoleSalary',
-    message: 'What is the salary of the role?',
-  }
-])
-.then(answer => {
-  var query = connection.query(
-      "INSERT INTO role (title, salary) VALUES (?, ?)", [answer.promptRoleName, answer.promptRoleSalary], (err) => {
+    .prompt([{
+      type: 'input',
+      name: 'title',
+      message: 'What is the name of the role?',
+    }, {
+      type: 'input',
+      name: 'salary',
+      message: 'What is the salary of the role?',
+    },
+    {
+      type: "list",
+      name: "department_id",
+      message: "Which department does the role belong to?",
+      choices: departmentChoices
+    }])
+    .then(answer => {
+      var query = connection.query(
+        "INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)", [answer.title, answer.salary, answer.department_id], (err) => {
           if (err) throw err;
-          console.log("Added " + answer.promptRoleName + ", " + answer.promptRoleSalary + " to the database");
-
-          connection.query("SELECT department.name FROM department", function (err, res) {
-            if (err) throw err;
-          var departmentsNew = res
-          // })
-          // connection.query("SELECT d.id FROM department", function (err, res) {
-          //   if (err) throw err;
-          // var departmentsNewID = res
-          // })
-            // console.log(departmentsNew)
-            // console.log(departmentsNewID)
-
-
-          inquirer
-          .prompt({
-            type: 'list',
-            name: 'promptDepartment',
-            message: 'What is the name of the role?',
-            choices: departmentsNew
-          })
-          .then(answer => {
-            var query = connection.query(
-                "INSERT INTO role (department_id) VALUES (?)", [answer.choices], (err) => {
-                    if (err) throw err;
-                    console.log("Hi");
+          console.log("Added " + answer.title + ", " + answer.salary + ", and " + answer.department_id + " to the database");
+          mainMenu();
         }
-      )})})
-    }
-  )
-  })}
+      )
+    })
+  })
+}
