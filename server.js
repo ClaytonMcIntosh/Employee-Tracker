@@ -120,26 +120,38 @@ function addRole() {
     message: 'What is the salary of the role?',
   }
 ])
-  .then(answer => {
-    var query = connection.query(
-        "INSERT INTO role (title, salary) VALUES (?, ?)", [answer.promptRoleName, answer.promptRoleSalary], (err) => {
-            if (err) throw err;
-            console.log("Added " + answer.promptRoleName + ", " + answer.promptRoleSalary + " to the database");
+.then(answer => {
+  var query = connection.query(
+      "INSERT INTO role (title, salary) VALUES (?, ?)", [answer.promptRoleName, answer.promptRoleSalary], (err) => {
+          if (err) throw err;
+          console.log("Added " + answer.promptRoleName + ", " + answer.promptRoleSalary + " to the database");
 
-            connection.query("SELECT department.name FROM department", function (err, res) {
-              if (err) throw err;
-              console.table(res);
-            var departmentsNew = res
-            
-            inquirer
-            .prompt({
-              type: 'list',
-              name: 'promptDepartment',
-              message: 'What is the name of the role?',
-              choices: departmentsNew
-            })
-          }
-        )
-      }
-    )
-    })}
+          connection.query("SELECT department.name FROM department", function (err, res) {
+            if (err) throw err;
+          var departmentsNew = res
+          // })
+          // connection.query("SELECT d.id FROM department", function (err, res) {
+          //   if (err) throw err;
+          // var departmentsNewID = res
+          // })
+            // console.log(departmentsNew)
+            // console.log(departmentsNewID)
+
+
+          inquirer
+          .prompt({
+            type: 'list',
+            name: 'promptDepartment',
+            message: 'What is the name of the role?',
+            choices: departmentsNew
+          })
+          .then(answer => {
+            var query = connection.query(
+                "INSERT INTO role (department_id) VALUES (?)", [answer.choices], (err) => {
+                    if (err) throw err;
+                    console.log("Hi");
+        }
+      )})})
+    }
+  )
+  })}
