@@ -74,7 +74,7 @@ function viewAllDepartments () {
 }
 
 function viewAllRoles () {
-  connection.query("SELECT e.id, r.title, d.name AS department, r.salary FROM employee e JOIN role r ON e.role_id = r.id JOIN department d ON d.id = r.department_id", function (err, res) {
+  connection.query("SELECT e.id, r.title, d.name AS department, r.salary FROM employee e LEFT JOIN role r ON e.role_id = r.id LEFT JOIN department d ON d.id = r.department_id", function (err, res) {
       if (err) throw err;
       console.table(res);
       mainMenu();
@@ -125,19 +125,21 @@ function addRole() {
         "INSERT INTO role (title, salary) VALUES (?, ?)", [answer.promptRoleName, answer.promptRoleSalary], (err) => {
             if (err) throw err;
             console.log("Added " + answer.promptRoleName + ", " + answer.promptRoleSalary + " to the database");
-            mainMenu();
-        }
+
+            connection.query("SELECT department.name FROM department", function (err, res) {
+              if (err) throw err;
+              console.table(res);
+            var departmentsNew = res
+            
+            inquirer
+            .prompt({
+              type: 'list',
+              name: 'promptDepartment',
+              message: 'What is the name of the role?',
+              choices: departmentsNew
+            })
+          }
+        )
+      }
     )
-})
-}
-
-
-
-
-// {
-//   type: 'list',
-//   name: 'promptRoleDepartment',
-//   message: 'What department is this role in?',
-// }
-
-
+    })}
