@@ -74,7 +74,7 @@ function viewAllDepartments () {
 }
 
 function viewAllRoles () {
-  connection.query("SELECT e.id, r.title, d.name AS department, r.salary FROM employee e LEFT JOIN role r ON e.role_id = r.id LEFT JOIN department d ON d.id = r.department_id", function (err, res) {
+  connection.query("SELECT r.id, r.title, d.name AS department, r.salary FROM department d LEFT JOIN role r ON d.id = department_id", function (err, res) {
       if (err) throw err;
       console.table(res);
       mainMenu();
@@ -150,7 +150,7 @@ function addEmployee() {
     const roleChoices = roles.map(rol => {
       return {
         name: rol.title,
-        value: rol.department_id
+        value: rol.id
       }
     });
 
