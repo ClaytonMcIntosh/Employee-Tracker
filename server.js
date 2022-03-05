@@ -154,6 +154,14 @@ function addEmployee() {
       }
     });
 
+    connection.query("SELECT * FROM employees_db.employee", function (err, result) {
+      let employees = result;
+      const managerChoices = employees.map(emp => {
+        return {
+          name: emp.first_name,
+          value: emp.id
+        }
+      });
 
   inquirer
     .prompt([{
@@ -170,10 +178,17 @@ function addEmployee() {
       name: "role",
       message: "What is the employee's role?",
       choices: roleChoices
-    }])
+    },
+    {
+      type: "list",
+      name: "manager",
+      message: "Who is the employee's manager?",
+      choices: managerChoices,
+    }
+  ])
     .then(answer => {
       var query = connection.query(
-        "INSERT INTO employee (first_name, last_name, role_id) VALUES (?, ?, ?)", [answer.first_name, answer.last_name, answer.role], (err) => {
+        "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)", [answer.first_name, answer.last_name, answer.role, answer.manager], (err) => {
           if (err) throw err;
           console.log("Added " + answer.first_name + ", " + answer.last_name + ", and " + answer.role_id + " to the database");
           mainMenu();
@@ -181,4 +196,4 @@ function addEmployee() {
       )
     })
   })
-}
+  })}
